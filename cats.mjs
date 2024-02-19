@@ -17,7 +17,6 @@ export let cats = [
 	['TT', 'Internet Cat'],
 	['CoCo', 'Internet Cat'],
 	['Mu', 'Stray Cat'],
-
 	['Todo', 'Internet Cat'],
 	['Dodo', 'Internet Cat'],
 	['Reagi', 'Stray Cat'],
@@ -28,21 +27,3 @@ export let cats = [
 	['Lola', 'Good Dog'],
 	['Olie', 'Good Dog'],
 ];
-// const hash_A = ['Seneca', 'Calico'];
-// const hash_B = ['Freya', 'Tabby'];
-// const hash_C = ['Okra', 'Tortie'];
-// const hash_D = ['Nico', 'Black'];
-// const hash_E = ['rOka', 'Mixed Up'];
-// const hash_F = ['Manon', 'Internet Cat'];
-// const hash_G = ['Samsek', 'Internet Cat'];
-// const hash_H = ['Lulu', 'Internet Cat'];
-// const hash_I = ['Chessica', 'Stray Cat'];
-// const hash_J = ['Voodoo', 'Stray Cat'];
-// const hash_K = ['Gilmak', 'Internet Cat'];
-// const hash_L = ['Chuchu', 'Internet Cat'];
-// const hash_M = ['Tuskie', 'Stray Cat'];
-// const hash_N = ['Mia', 'Stray Cat'];
-// const hash_O = ['Tilia', 'Stray Cat'];
-// const hash_P = ['TT', 'Internet Cat'];
-// const hash_Q = ['CoCo', 'Internet Cat'];
-// const hash_R = ['Mu', 'Stray Cat'];

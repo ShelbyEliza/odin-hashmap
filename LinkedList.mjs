@@ -1,4 +1,4 @@
-export class Node {
+class Node {
 	constructor(key, value = null, next = null) {
 		this.key = key;
 		this.value = value;
@@ -13,6 +13,7 @@ export class LinkedList {
 
 		this.length = null;
 	}
+
 	append(key, value) {
 		let newNode = new Node(key, value);
 
@@ -64,10 +65,21 @@ export class LinkedList {
 		this.length--;
 	}
 
+	lookUp(data) {
+		let current = this.head;
+		while (current.next !== null) {
+			if (current.key === data) {
+				return current;
+			}
+			current = current.next;
+		}
+		return null;
+	}
+
 	contains(data) {
 		let current = this.head;
 		while (current.next !== null) {
-			if (current.value === data) {
+			if (current.key === data) {
 				return true;
 			}
 			current = current.next;
@@ -77,9 +89,10 @@ export class LinkedList {
 
 	find(data) {
 		let current = this.head;
+
 		while (current.next !== null) {
-			if (current.value === data) {
-				return current;
+			if (current.key === data) {
+				return current.value;
 			}
 			current = current.next;
 		}
@@ -91,7 +104,7 @@ export class LinkedList {
 			return null;
 		}
 		let current = this.head;
-		let count = 1;
+		let count = 0;
 		while (count < index) {
 			current = current.next;
 			count++;
@@ -123,12 +136,12 @@ export class LinkedList {
 	}
 
 	removeAt(index) {
-		if (index > this.length || index <= 0) {
+		if (index > this.length || index < 0) {
 			return 'Index not found';
 		}
 
 		let valAfter = this.at(index + 1);
-		if (index === 1) {
+		if (index === 0) {
 			this.head = valAfter;
 			this.length--;
 			return true;
@@ -136,7 +149,6 @@ export class LinkedList {
 
 		let valBefore = this.at(index - 1);
 		if (valBefore && valAfter) {
-			console.log(valBefore);
 			valBefore.next = valAfter;
 			this.length--;
 			return true;
@@ -144,27 +156,39 @@ export class LinkedList {
 		return false;
 	}
 
-	toString() {
+	findPosition(data) {
 		let current = this.head;
-		while (current) {
-			console.log(current.value);
+		let count = 0;
+		while (current.next !== null) {
+			if (current.key == data) {
+				return count;
+			}
 			current = current.next;
+			count++;
 		}
-		console.log(current);
+		return null;
 	}
 
-	printAll() {
+	// printKeys(allKeys) {
+	// 	let current = this.head;
+	// 	while (current) {
+	// 		allKeys.push(current.key);
+	// 		current = current.next;
+	// 	}
+	// }
+	// printValues(allValues) {
+	// 	let current = this.head;
+	// 	while (current) {
+	// 		allValues.push(current.value);
+	// 		current = current.next;
+	// 	}
+	// }
+
+	printAll(all) {
 		let current = this.head;
 		while (current) {
-			console.log(current);
+			all.push([current.key, current.value]);
 			current = current.next;
 		}
 	}
 }
-
-let myList = new LinkedList();
-
-// myList.append('a');
-// myList.append('b');
-// myList.append('c');
-// myList.append('d');

@@ -1,7 +1,7 @@
 import { LinkedList } from './LinkedList.mjs';
 import { cats } from './cats.mjs';
 
-class HashMap {
+class HashSet {
 	constructor() {
 		this.filled = 0;
 		this.buckets = new Array(16);
@@ -69,7 +69,9 @@ class HashMap {
 
 	remove(key) {
 		let index = this.hash(key);
+		// console.log(index);
 		let position = this.buckets[index].findPosition(key);
+		// console.log(position);
 		if (this.buckets[index].removeAt(position)) {
 			this.filled--;
 			return true;
@@ -116,17 +118,17 @@ class HashMap {
 	}
 }
 
-const myHashMap = new HashMap();
+const myHashSet = new HashSet();
 
 /** Hash Function: */
 
 cats.forEach((cat) => {
-	myHashMap.set(cat[0], cat[1]);
+	myHashSet.set(cat[0], cat[1]);
 });
 
-console.log(myHashMap.buckets);
-// console.log(myHashMap.length());
+// console.log(myHashSet.buckets);
+// console.log(myHashSet.length());
 
-// console.log(myHashMap.entries());
-// console.log(myHashMap.values());
-// console.log(myHashMap.keys());
+// console.log(myHashSet.entries());
+// console.log(myHashSet.values());
+// console.log(myHashSet.keys());
