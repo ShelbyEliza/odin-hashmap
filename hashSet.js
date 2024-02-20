@@ -9,15 +9,18 @@ class HashSet {
 		this.loadFactor = 0.75;
 	}
 
-	validateIndex(index) {
-		if (index < 0 || index >= this.buckets.length) {
-			throw new Error('Trying to access index out of bound');
-		}
-		return index;
+	length() {
+		return this.filled;
 	}
 
 	grow() {
 		this.capacity = this.buckets.length * 2;
+	}
+
+	clear() {
+		this.filled = 0;
+		this.buckets = new Array(16);
+		this.capacity = this.buckets.length;
 	}
 
 	hash(key) {
@@ -29,19 +32,18 @@ class HashSet {
 		}
 
 		let index = hashCode % this.buckets.length;
-		this.validateIndex(index);
+
+		// check if index is within bounds:
+		if (index < 0 || index >= this.buckets.length) {
+			throw new Error('Trying to access index out of bound');
+		}
+
 		return index;
 	}
 
-	checkFillLevel() {
+	set(key) {
+		// check if load factor is reached:
 		if (this.filled / this.buckets.length >= this.loadFactor) {
-			return true;
-		}
-		return false;
-	}
-
-	set(key, value) {
-		if (this.checkFillLevel()) {
 			this.grow();
 		}
 
@@ -52,59 +54,24 @@ class HashSet {
 		}
 		this.filled++;
 
-		this.buckets[index].append(key, value);
-	}
-
-	get(key) {
-		let index = this.hash(key);
-
-		return this.buckets[index].find(key);
+		this.buckets[index].append(key);
 	}
 
 	has(key) {
 		let index = this.hash(key);
+		// console.log(this.buckets[index]);
 
 		return this.buckets[index].contains(key);
 	}
 
 	remove(key) {
 		let index = this.hash(key);
-		// console.log(index);
-		let position = this.buckets[index].findPosition(key);
-		// console.log(position);
-		if (this.buckets[index].removeAt(position)) {
+
+		if (this.buckets[index].removeKey(key)) {
 			this.filled--;
 			return true;
 		}
 		return false;
-	}
-
-	length() {
-		return this.filled;
-	}
-
-	clear() {
-		this.filled = 0;
-		this.buckets = new Array(16);
-		this.capacity = this.buckets.length;
-	}
-
-	keys() {
-		let allKeys = [];
-		let allEntries = this.entries();
-		allEntries.forEach((entry) => {
-			allKeys.push(entry[0]);
-		});
-		return allKeys;
-	}
-
-	values() {
-		let allValues = [];
-		let allEntries = this.entries();
-		allEntries.forEach((entry) => {
-			allValues.push(entry[1]);
-		});
-		return allValues;
 	}
 
 	entries() {
@@ -123,12 +90,7 @@ const myHashSet = new HashSet();
 /** Hash Function: */
 
 cats.forEach((cat) => {
-	myHashSet.set(cat[0], cat[1]);
+	myHashSet.set(cat[0]);
 });
 
-// console.log(myHashSet.buckets);
-// console.log(myHashSet.length());
-
-// console.log(myHashSet.entries());
-// console.log(myHashSet.values());
-// console.log(myHashSet.keys());
+console.log(myHashSet.entries());

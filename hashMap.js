@@ -9,15 +9,18 @@ class HashMap {
 		this.loadFactor = 0.75;
 	}
 
-	validateIndex(index) {
-		if (index < 0 || index >= this.buckets.length) {
-			throw new Error('Trying to access index out of bound');
-		}
-		return index;
+	length() {
+		return this.filled;
 	}
 
 	grow() {
 		this.capacity = this.buckets.length * 2;
+	}
+
+	clear() {
+		this.filled = 0;
+		this.buckets = new Array(16);
+		this.capacity = this.buckets.length;
 	}
 
 	hash(key) {
@@ -29,19 +32,18 @@ class HashMap {
 		}
 
 		let index = hashCode % this.buckets.length;
-		this.validateIndex(index);
+
+		// check if index is within bounds:
+		if (index < 0 || index >= this.buckets.length) {
+			throw new Error('Trying to access index out of bound');
+		}
+
 		return index;
 	}
 
-	checkFillLevel() {
-		if (this.filled / this.buckets.length >= this.loadFactor) {
-			return true;
-		}
-		return false;
-	}
-
 	set(key, value) {
-		if (this.checkFillLevel()) {
+		// check if load factor is reached:
+		if (this.filled / this.buckets.length >= this.loadFactor) {
 			this.grow();
 		}
 
@@ -55,7 +57,7 @@ class HashMap {
 		this.buckets[index].append(key, value);
 	}
 
-	get(key) {
+	getValue(key) {
 		let index = this.hash(key);
 
 		return this.buckets[index].find(key);
@@ -69,22 +71,11 @@ class HashMap {
 
 	remove(key) {
 		let index = this.hash(key);
-		let position = this.buckets[index].findPosition(key);
-		if (this.buckets[index].removeAt(position)) {
+		if (this.buckets[index].removeKey(key)) {
 			this.filled--;
 			return true;
 		}
 		return false;
-	}
-
-	length() {
-		return this.filled;
-	}
-
-	clear() {
-		this.filled = 0;
-		this.buckets = new Array(16);
-		this.capacity = this.buckets.length;
 	}
 
 	keys() {
@@ -118,15 +109,10 @@ class HashMap {
 
 const myHashMap = new HashMap();
 
-/** Hash Function: */
+// /** Hash Function: */
 
 cats.forEach((cat) => {
 	myHashMap.set(cat[0], cat[1]);
 });
 
-console.log(myHashMap.buckets);
-// console.log(myHashMap.length());
-
-// console.log(myHashMap.entries());
-// console.log(myHashMap.values());
-// console.log(myHashMap.keys());
+console.log(myHashMap.entries());

@@ -1,43 +1,53 @@
 class Node {
-	constructor(key, value = null, next = null) {
+	constructor(key) {
 		this.key = key;
+		this.next = null;
+	}
+}
+
+class NodeWithValue extends Node {
+	constructor(key, value = null) {
+		super(key);
 		this.value = value;
-		this.next = next;
 	}
 }
 
 export class LinkedList {
 	constructor() {
 		this.head = null;
-		this.tail = null;
-
+		this.tail = this.getTail();
 		this.length = null;
 	}
 
 	append(key, value) {
-		let newNode = new Node(key, value);
+		let newNode;
+		value
+			? (newNode = new NodeWithValue(key, value))
+			: (newNode = new Node(key, value));
 
 		if (this.head === null) {
 			this.head = newNode;
+
 			this.length = 1;
 		} else {
+			this.getTail();
 			let last = this.getTail();
 			last.next = newNode;
+
 			this.length++;
 		}
 	}
 
-	prepend(data) {
-		let newNode = new Node(data);
-
+	getTail() {
+		let current = this.head;
 		if (this.head === null) {
-			this.head = newNode;
-			this.length = 1;
-		} else {
-			newNode.next = this.head;
-			this.head = newNode;
-			this.length++;
+			return null;
 		}
+		while (current.next !== null) {
+			current = current.next;
+		}
+
+		return current;
 	}
 
 	getSize() {
@@ -48,18 +58,11 @@ export class LinkedList {
 		return this.head;
 	}
 
-	getTail() {
-		let current = this.head;
-		while (current.next !== null) {
-			current = current.next;
-		}
-		return current;
-	}
-
 	pop() {
 		let current = this.head;
 		while (current.next.next !== null) {
 			current = current.next;
+			this.tail = current;
 		}
 		current.next = null;
 		this.length--;
@@ -78,6 +81,10 @@ export class LinkedList {
 
 	contains(data) {
 		let current = this.head;
+
+		if (current.key === data || this.getTail().key === data) {
+			return true;
+		}
 		while (current.next !== null) {
 			if (current.key === data) {
 				return true;
@@ -112,82 +119,49 @@ export class LinkedList {
 		return current;
 	}
 
-	insertAt(data, index) {
-		if (index > this.length + 1 || index <= 0) {
-			return 'Index not found';
-		}
-
-		if (index === this.length + 1) {
-			this.append(data);
-			return true;
-		}
-		if (index === 1) {
-			this.prepend(data);
-			return true;
-		}
-
-		let valBefore = this.at(index - 1);
-		let valOf = this.at(index);
-
-		let newNode = new Node(data);
-		newNode.next = valOf;
-		valBefore.next = newNode;
-		this.length++;
-	}
-
-	removeAt(index) {
-		if (index > this.length || index < 0) {
-			return 'Index not found';
-		}
-
-		let valAfter = this.at(index + 1);
-		if (index === 0) {
-			this.head = valAfter;
-			this.length--;
-			return true;
-		}
-
-		let valBefore = this.at(index - 1);
-		if (valBefore && valAfter) {
-			valBefore.next = valAfter;
-			this.length--;
-			return true;
-		}
-		return false;
-	}
-
-	findPosition(data) {
-		let current = this.head;
-		let count = 0;
-		while (current.next !== null) {
-			if (current.key == data) {
-				return count;
+	removeKey(key) {
+		// key to remove is the head:
+		if (this.head.key === key) {
+			// the list is only 1 long:
+			if (this.length === 1) {
+				this.head = null;
+				this.length = 0;
+			} else {
+				this.head = this.head.next;
+				this.length--;
 			}
-			current = current.next;
-			count++;
+			return true;
+		} else {
+			let current = this.head;
+			if (current.next) {
+				while (current !== null) {
+					// if current is the value before:
+					if (current.next.key === key) {
+						// if there is a value after:
+						if (current.next.next) {
+							current.next = current.next.next;
+							// if value to delete is the tail:
+						} else {
+							current.next = null;
+						}
+						this.length--;
+						return true;
+					}
+					current = current.next;
+				}
+			}
+			return false;
 		}
-		return null;
 	}
-
-	// printKeys(allKeys) {
-	// 	let current = this.head;
-	// 	while (current) {
-	// 		allKeys.push(current.key);
-	// 		current = current.next;
-	// 	}
-	// }
-	// printValues(allValues) {
-	// 	let current = this.head;
-	// 	while (current) {
-	// 		allValues.push(current.value);
-	// 		current = current.next;
-	// 	}
-	// }
 
 	printAll(all) {
 		let current = this.head;
 		while (current) {
-			all.push([current.key, current.value]);
+			if (current.value) {
+				all.push([current.key, current.value]);
+			} else {
+				all.push(current.key);
+			}
 			current = current.next;
 		}
 	}
